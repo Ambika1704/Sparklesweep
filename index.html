@@ -78,8 +78,54 @@
       padding: 15px;
       margin-top: 40px;
     }
+
+    /* Loading screen styles */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  background: #f9f9f9; /* light background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-container {
+  text-align: center;
+}
+
+.progress-bar {
+  width: 250px;
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress {
+  height: 100%;
+  width: 0;
+  background: #4f46e5; /* primary color */
+  transition: width 0.2s ease;
+}
+
+#loading-screen p {
+  color: #666;
+  font-size: 14px;
+}
+
   </style>
 </head>
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loading-container">
+    <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+    </div>
+    <p>Loading Sparklesweep...</p>
+  </div>
+</div>
 <body>
   <header>
     <h1>Welcome to Sparkle Sweep</h1>
@@ -127,5 +173,25 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let progress = 0;
+    const progressBar = document.getElementById("progress");
+    const loadingScreen = document.getElementById("loading-screen");
+
+    const timer = setInterval(() => {
+      progress += 2;
+      progressBar.style.width = progress + "%";
+
+      if (progress >= 100) {
+        clearInterval(timer);
+        setTimeout(() => {
+          loadingScreen.style.display = "none"; // hide loader
+        }, 300);
+      }
+    }, 40);
+  });
+</script>
+
 </body>
 </html>
