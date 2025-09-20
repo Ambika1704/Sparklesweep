@@ -117,21 +117,23 @@
 
   </style>
 </head>
-<!-- Loading Screen -->
-<div id="loading-screen">
-  <div class="loading-container">
-    <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-    </div>
-    <p>Loading Sparklesweep...</p>
-  </div>
-</div>
+
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loading-container">
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+      <p>Loading Sparklesweep...</p>
+    </div>
+  </div>
+
   <header>
     <h1>Welcome to Sparkle Sweep</h1>
     <nav>
       <ul>
-        <li><a href="index.html">Home</a></li>
+        <li><a href="#" id="home-link">Home</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="booking.html">Booking</a></li>
@@ -179,19 +181,32 @@
     const progressBar = document.getElementById("progress");
     const loadingScreen = document.getElementById("loading-screen");
 
-    const timer = setInterval(() => {
-      progress += 2;
-      progressBar.style.width = progress + "%";
+    // ✅ Show loader only on FIRST visit
+    if (!sessionStorage.getItem("loaderShown")) {
+      const timer = setInterval(() => {
+        progress += 2;
+        progressBar.style.width = progress + "%";
 
-      if (progress >= 100) {
-        clearInterval(timer);
-        setTimeout(() => {
-          loadingScreen.style.display = "none"; // hide loader
-        }, 300);
-      }
-    }, 40);
+        if (progress >= 100) {
+          clearInterval(timer);
+          setTimeout(() => {
+            loadingScreen.style.display = "none"; // hide loader
+            sessionStorage.setItem("loaderShown", "true"); // save in session
+          }, 300);
+        }
+      }, 40);
+    } else {
+      // If already visited, skip loader
+      loadingScreen.style.display = "none";
+    }
+
+    // ✅ Prevent Home link from reloading page
+    document.getElementById("home-link").addEventListener("click", function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
   });
-</script>
+  </script>
 
 </body>
 </html>
